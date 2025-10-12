@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                echo '🔹 Checking out source code...'
+                git branch: 'main', url: 'https://github.com/yourusername/demo-app.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo '🏗️ Building the project...'
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '🧪 Running unit tests...'
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and tests completed successfully!'
+        }
+        failure {
+            echo '❌ Build or tests failed!'
+        }
+    }
+}
