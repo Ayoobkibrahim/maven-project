@@ -18,7 +18,44 @@ pipeline {
         }
 
         stage('Test') {
+            steps {pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
             steps {
+                echo '🔹 Checking out source code...'
+                git branch: 'main',
+                    url: 'https://github.com/Ayoobkibrahim/maven-project.git',
+                    credentialsId: 'github-credentials'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo '🚀 Building Maven project...'
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '🧪 Running Unit Tests...'
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and Tests Successful!'
+        }
+        failure {
+            echo '❌ Build or tests failed!'
+        }
+    }
+}
+
                 echo '🧪 Running unit tests...'
                 sh 'mvn test'
             }
