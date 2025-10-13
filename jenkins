@@ -1,73 +1,56 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        SONARQUBE = 'SonarQube-Local' // Name of SonarQube configured in Jenkins
+    }
 
-        stage('Checkout Code') {
+    stages {
+        stage('Checkout') {
             steps {
-                echo '🔹 Checking out source code...'
-                git branch: 'main', url: 'https://github.com/yourusername/demo-app.git'
+                git url: 'https://github.com/Ayoobkibrahim/maven-project.git', branch: 'main'
             }
         }
 
         stage('Build') {
             steps {
-                echo '🏗️ Building the project...'
                 sh 'mvn clean compile'
             }
         }
 
-        stage('Test') {
-            steps {pipeline {
-    agent any
-
-    stages {
-        stage('Checkout Code') {
+        stage('Unit Test') {
             steps {
-                echo '🔹 Checking out source code...'
-                git branch: 'main',
-                    url: 'https://github.com/Ayoobkibrahim/maven-project.git',
-                    credentialsId: 'github-credentials'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo '🚀 Building Maven project...'
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo '🧪 Running Unit Tests...'
                 sh 'mvn test'
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                withSonarQubeEnv("${SonarQube-Local}") {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=maven-project'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build and Tests Successful!'
+            mail to: 'ayoobkibrahim109@gmail.com',
+                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Good news! The build succeeded.\nCheck console output at: ${env.BUILD_URL}"
         }
         failure {
-            echo '❌ Build or tests failed!'
-        }
-    }
-}
-
-                echo '🧪 Running unit tests...'
-                sh 'mvn test'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Build and tests completed successfully!'
-        }
-        failure {
-            echo '❌ Build or tests failed!'
+            mail to: 'ayoobkibrahim109@gmail.com',
+                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Oops! The build failed.\nCheck console output at: ${env.BUILD_URL}"
         }
     }
 }
