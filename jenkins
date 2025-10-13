@@ -26,7 +26,7 @@ pipeline {
 
         stage('Code Analysis') {
             steps {
-                withSonarQubeEnv("${SonarQube-Local}") {
+                withSonarQubeEnv("SonarQube-Local") {
                     sh 'mvn sonar:sonar -Dsonar.projectKey=maven-project'
                 }
             }
