@@ -2,7 +2,7 @@ pipeline {
     agent {label 'local-agent'}
 
     environment {
-        SONARQUBE = 'SonarQube-Local' // Name of SonarQube configured in Jenkins
+        SONARQUBE = 'SonarQube-Local' 
     }
 
     stages {
@@ -51,13 +51,33 @@ pipeline {
     post {
         success {
             mail to: 'ayoobkibrahim109@gmail.com',
-                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Good news! The build succeeded.\nCheck console output at: ${env.BUILD_URL}"
+                subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """Good news! The pipeline succeeded.
+             
+                • Job: ${env.JOB_NAME}
+                • Build Number: ${env.BUILD_NUMBER}
+                • URL: ${env.BUILD_URL}
+                """
         }
         failure {
             mail to: 'ayoobkibrahim109@gmail.com',
-                 subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Oops! The build failed.\nCheck console output at: ${env.BUILD_URL}"
+                subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """The pipeline failed.
+             
+                • Job: ${env.JOB_NAME}
+                • Build URL: ${env.BUILD_URL}
+                • Check console logs for error details.
+                """
+        }
+        aborted {
+            mail to: 'ayoobkibrahim109@gmail.com',
+                subject: "🚫 ABORTED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """The build was manually aborted.
+             
+                • Job: ${env.JOB_NAME}
+                • URL: ${env.BUILD_URL}
+                • Check if it was canceled intentionally.
+                """
         }
     }
 }
