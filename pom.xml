@@ -51,7 +51,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.example.App.java</mainClass> 
+                            <mainClass>com.example.App</mainClass> 
                         </manifest>
                     </archive>
                 </configuration>
