@@ -5,6 +5,7 @@ pipeline {
         SONARQUBE = 'SonarQube-Local'
 	    DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
 	    IMAGE_NAME = 'maven-app' 
+        IMAGE_TAG = 'v1'
     }
 
     stages {
@@ -51,9 +52,14 @@ pipeline {
 
         stage('Docker Login'){
 	        steps{
-		        sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
+		        echo "🔐 Logging into DockerHub..."
+                script{
+                    withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
+                        sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                    }
+                }
 	        }
-	    }
+        }
 
         stage('Docker Build & Tag'){
             steps{
