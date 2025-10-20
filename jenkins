@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONARQUBE = 'SonarQube-Local'
 	    DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
-	    IMAGE_NAME = 'maven-app' 
+	    IMAGE_NAME = 'ayoobki/maven-app' 
         IMAGE_TAG = 'v1'
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
     }
