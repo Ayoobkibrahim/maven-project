@@ -1,77 +1,98 @@
-# 🚀 CI/CD Pipeline with Jenkins, Maven, and SonarQube
+# 🚀 Maven CI/CD Project with Jenkins, SonarQube, and Docker
 
 ## 📘 Project Overview
-This project demonstrates a complete **CI/CD pipeline** using **Jenkins**, **Maven**, and **SonarQube**.  
-It automates **code checkout, build, testing, code analysis, quality gate validation, and notifications**.
+This project demonstrates a **complete CI/CD pipeline** for a **Java Maven project** using **Jenkins**, **SonarQube**, and **Docker**.  
+
+The pipeline automates the entire software delivery process, including:  
+- **Code checkout** from GitHub  
+- **Build** and **unit testing** using Maven  
+- **Code analysis** with SonarQube and enforcement of **Quality Gate**  
+- **Docker image creation**, tagging, and push to DockerHub  
+- **Notifications** on pipeline status  
+
+This ensures that every code change is **tested, analyzed, and deployed consistently**.
+
+---
 
 ## 🧱 Project Steps
 
-### 1️⃣ Install Jenkins
-- Install Jenkins on a **local machine** or **AWS EC2 instance**.  
-- Access via browser at **http://localhost:8080**.  
-- Install essential plugins:
+### 1️⃣ Create a Maven Project
+- Initialize a **Java Maven project** with standard folder structure.  
+- Add necessary **dependencies** for unit testing.  
+- Ensure the project **builds successfully** locally and unit tests pass.
+
+---
+
+### 2️⃣ Setup Jenkins Pipeline
+- Install Jenkins on a **local machine** or **cloud server**.  
+- Install required plugins:
   - Git Plugin  
   - Maven Integration Plugin  
   - SonarQube Scanner Plugin  
+  - Docker Pipeline Plugin  
   - Email Extension Plugin  
+- Create a **pipeline job** in Jenkins linked to your GitHub repository.  
+- Configure **automatic triggers** via GitHub webhooks or polling SCM.
 
-### 2️⃣ Integrate SonarQube / SonarCloud
+---
+
+### 3️⃣ Integrate SonarQube
 - Install **SonarQube** locally or use **SonarCloud**.  
-- Connect Jenkins via **server URL** and **authentication token**.  
-- Configure **SonarScanner** in Jenkins **Global Tool Configuration**.  
-- Apply a **Quality Gate** to enforce code quality.
+- Connect Jenkins to SonarQube using **server URL** and **authentication token**.  
+- Define a **Quality Gate** to enforce code quality standards.  
+- The pipeline should **fail automatically** if the Quality Gate is not passed.
 
-### 3️⃣ Create a Sample Maven Project
-- Create a **Maven Java project** with proper folder structure.  
-- Define dependencies in `pom.xml`.  
-- Ensure project **builds and tests successfully**.
+---
 
-### 4️⃣ Create a Jenkinsfile
-- Define pipeline stages:
-  1. **Code Checkout**  
-  2. **Build with Maven**  
-  3. **Run Unit Tests**  
-  4. **Code Analysis with SonarQube**  
-  5. **Quality Gate Validation**  
-- Place the Jenkinsfile in the **root directory**.
+### 4️⃣ Implement CI/CD Stages
+The Jenkins pipeline should include the following stages:
 
-### 5️⃣ Store Jenkinsfile in SCM
-- Commit and push Jenkinsfile to **GitHub**.  
-- Configure Jenkins to pull the file from the repository during pipeline execution.
+1. **Code Checkout:** Pull the latest code from GitHub.  
+2. **Build:** Compile the Java project using Maven.  
+3. **Unit Test:** Run automated unit tests to ensure correctness.  
+4. **Code Analysis:** Analyze the code with SonarQube.  
+5. **Quality Gate:** Stop the pipeline if code quality standards fail.  
+6. **Docker Build & Push:**  
+   - Log in to DockerHub  
+   - Build a Docker image from the Maven project  
+   - Tag the image with the **current build number**  
+   - Push the image to DockerHub  
+   - Log out from DockerHub  
 
-### 6️⃣ Configure Auto-Trigger / Poll SCM
-- Enable **automatic builds** on code push.  
-- Use **Poll SCM** or **GitHub Webhooks** for real-time triggers.  
+---
 
-### 7️⃣ Configure Email Notifications
-- Configure **SMTP server** in Jenkins.  
-- Set up email notifications for **build success, failure, or unstable builds**.  
+### 5️⃣ Docker Integration
+- Write a **Dockerfile** to containerize your Maven application.  
+- Use **multi-stage builds**: first compile the project, then run it in a minimal runtime image.  
+- Test Docker image locally before pushing.
 
-## 🧪 Running the Pipeline
-1. Clone the repository from GitHub.  
-2. Open Jenkins and create a **New Pipeline Job**.  
-3. Choose **Pipeline script from SCM** and provide the repository URL.  
-4. Save and run the pipeline.  
-5. Monitor automated execution of **build, test, and code analysis**.
+---
 
-## ⚙️ Tools & Technologies
+### 6️⃣ Pipeline Benefits
+- Fully **automated CI/CD** for Maven projects.  
+- **Early detection** of build errors or failing tests.  
+- Enforced **code quality** with SonarQube.  
+- Dockerized application ready for deployment in **any environment**.  
+- Centralized monitoring via **Jenkins dashboard**.
+
+---
+
+### 7️⃣ Recommended Tools & Technologies
 | Tool | Purpose |
 |------|----------|
 | Jenkins | CI/CD automation server |
 | Maven | Build & dependency management |
 | SonarQube / SonarCloud | Static code analysis & quality gates |
-| GitHub | Source code management |
+| Docker | Containerization and deployment |
+| GitHub | Source code version control |
 | JUnit | Unit testing framework |
 
-## 📊 Pipeline Workflow
-**Code Commit → Jenkins Trigger → Build → Test → Code Analysis → Quality Gate → Email Notification**
+---
 
-## 🏁 Outcome
-- Fully automated CI/CD pipeline triggered by code changes.  
-- Continuous build and testing via Maven.  
-- Code analysis with SonarQube and quality gate validation.  
-- Email notifications for build results.  
-- Centralized Jenkins dashboard for monitoring.
+### 8️⃣ Workflow Summary
+**Code Commit → Jenkins Trigger → Build → Unit Test → SonarQube Analysis → Quality Gate → Docker Build & Push → Notifications**
+
+---
 
 ## 👨‍💻 Author
 **Ayoob K Ibrahim**
