@@ -5,7 +5,7 @@ pipeline {
         SONARQUBE = 'SonarQube-Local'
 	    DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
 	    IMAGE_NAME = 'ayoobki/maven-app' 
-        IMAGE_TAG = 'v1'
+        IMAGE_TAG = "build-${BUILD_NUMBER}"
         DOCKER_IMAGE = "${IMAGE_NAME}:${IMAGE_TAG}"
     }
 
@@ -58,6 +58,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
                         sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
                     }
+                    echo "✅ Docker login successful."
                 }
 	        }
         }
@@ -65,8 +66,15 @@ pipeline {
         stage('Docker Build & Tag'){
             steps{
                 script{
-                    echo "🐳 Building Docker image ${DOCKER_IMAGE}..."
-                    sh "docker build -t ${DOCKER_IMAGE} ."
+                    def  commitHash = sh(script: "git rev-parse --short HEAD", returnStdout : true).trim()
+
+                    env.IMAGE_TAG = "build-${env.BUILD_NUMBER}-${commitHash}"
+                    env.DOCKER_IMAGE = "${IMAGE_NAME}:${env.IMAGE_TAG}"
+
+
+                    echo "🐳 Building Docker image ${env.DOCKER_IMAGE}..."
+                    sh "docker build -t ${env.DOCKER_IMAGE} ."
+                    echo "✅ Docker image built and tagged successfully."
                 }
             }
         }
@@ -74,8 +82,9 @@ pipeline {
         stage('Docker push'){
             steps{
                 script{
-                    echo "⬆️ Pushing Docker image ${DOCKER_IMAGE}..."
-                    sh "docker push ${DOCKER_IMAGE}"
+                    echo "⬆️ Pushing Docker image ${env.DOCKER_IMAGE}..."
+                    sh "docker push ${env.DOCKER_IMAGE}"
+                    echo "✅ Docker image pushed successfully"
                 }
             }
         }
@@ -84,6 +93,7 @@ pipeline {
             steps{
                 echo "🚪 Logging out from DockerHub..."
                 sh "docker logout"
+                echo "✅ Docker logout successful"
             }
         }
     }
