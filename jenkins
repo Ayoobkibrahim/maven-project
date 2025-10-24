@@ -1,4 +1,4 @@
-def notify = load '/var/lib/jenkins/shared-libs/jenkins-shared-lib/vars/notify.groovy'
+@Library('jenkins-shared-lib@master') _
 
 pipeline {
     agent {label 'local-agent'}
