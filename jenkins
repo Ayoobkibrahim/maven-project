@@ -89,13 +89,6 @@ pipeline {
             }
         }
 
-        stage('Docker Logout'){
-            steps{
-                echo "🚪 Logging out from DockerHub..."
-                sh "docker logout"
-                echo "✅ Docker logout successful"
-            }
-        }
     }
 
     post {
