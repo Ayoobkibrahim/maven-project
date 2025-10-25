@@ -1,3 +1,5 @@
+@Library('jenkins-shared-lib') _
+
 pipeline {
     agent {label 'local-agent'}
 
@@ -98,34 +100,13 @@ pipeline {
 
     post {
         success {
-            mail to: 'ayoobkibrahim109@gmail.com',
-                subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """Good news! The pipeline succeeded.
-             
-                • Job: ${env.JOB_NAME}
-                • Build Number: ${env.BUILD_NUMBER}
-                • URL: ${env.BUILD_URL}
-                """
+            notify('SUCCESS')
         }
         failure {
-            mail to: 'ayoobkibrahim109@gmail.com',
-                subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """The pipeline failed.
-             
-                • Job: ${env.JOB_NAME}
-                • Build URL: ${env.BUILD_URL}
-                • Check console logs for error details.
-                """
+            notify('FAILURE')
         }
         aborted {
-            mail to: 'ayoobkibrahim109@gmail.com',
-                subject: "🚫 ABORTED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """The build was manually aborted.
-             
-                • Job: ${env.JOB_NAME}
-                • URL: ${env.BUILD_URL}
-                • Check if it was canceled intentionally.
-                """
+            notify('ABORTED')
         }
     }
 }
