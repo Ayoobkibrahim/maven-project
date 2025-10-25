@@ -99,6 +99,19 @@ pipeline {
     }
 
     post {
+        always{
+            script{
+                echo "🧹 Cleanup: Logging out from DockerHub and removing local images..."
+                sh """
+                    docker logout || true
+                    docker image prune -af || true
+                    docker rmi ${env.DOCKER_IMAGE} || true
+                """
+                echo "✅ Docker cleanup complete."
+            }
+        }
+
+
         success {
             notify('SUCCESS')
         }
