@@ -89,7 +89,85 @@ pipeline {
             }
         }
 
+
+        stage('Update Helm Chart Values'){
+            steps{
+                script{
+                    echo "📝 Updating image tag in Helm values.yaml...."
+                    sh """
+                        sed -i 's|tag:.*|tag: \"${env.IMAGE_TAG}\"|g' maven-helm-chart/values.yaml
+                    """
+                    echo "✅ Helm values.yaml update with tag: ${env.IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Package Helm Chart'){
+            steps{
+                script{
+                    echo "📦 Packaging Helm chart..."
+                    sh """
+                        cd maven-helm-chart
+                        helm package .
+                        cd ..
+                    """
+                    echo "✅ Helm chart packaged successfully"
+                }
+            }
+        }
+
+        stage('Push Helm Chart to Docker Hub'){
+            steps{
+                script{
+                    echo "⬆️ Pushing Helm chart to Docker Hub OCI registry..."
+                    withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
+                        sh """
+                        echo "\$DOCKER_PASS" | helm registry login -u "\$DOCKER_USER" --password-stdin docker.io
+                        
+                        cd maven-helm-chart
+                        helm push maven-app-*.tgz oci://docker.io/\$DOCKER_USER
+                        cd ..
+                        """
+                    }
+                    echo "✅ Helm chart pushed to Docker Hub"
+                }
+            }
+        }
+
+
+        stage('Archive Helm Chart'){
+            steps{
+                script{
+                    echo "📦 Archiving Helm chart..."
+                    archiveArtifacts artifacts: 'maven-helm-chart/*.tgz', fingerprint: true
+                    echo "✅ Helm chart archived"
+                }
+            }
+        }
+
+
+
+        stage('Trigger Deploy Job'){
+            steps{
+                script{
+                    echo "🚀 Triggering Deploy Job..."
+                    build job: 'maven-deploy-job',
+                        parameters : [
+                            string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
+                            string(name: 'IMAGE_TAG', value: "${env.IMAGE_TAG}"),
+                            string(name: 'NAMESPACE', value: 'default'),
+                            string(name: 'RELEASE_NAME', value: 'maven-app')
+                        ],
+                        wait: false
+                    echo "✅ Deploy job triggered with build number: ${env.BUILD_NUMBER}"
+                }
+            }
+        }
+
     }
+
+
+    
 
     post {
         always{
