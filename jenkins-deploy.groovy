@@ -37,7 +37,15 @@ pipeline{
                         tar -xzf maven-app-*.tgz
                         """
                     }
-                    echo "✅ Helm chart downloaded successfully"
+
+                    def chartDir = sh(
+                        script: "tar -tzf maven-app-*.tgz | head -1 | cut -d'/' -f1",
+                        returnStdout: true
+                    ).trim()
+                    env.CHART_DIR = chartDir
+
+                    echo "📦 Chart directory identified: ${env.CHART_DIR}"
+                    echo "✅ Helm chart downloaded successfully.."
                 }
             }
         }
@@ -49,9 +57,16 @@ pipeline{
                     echo "🚀 Deploying application to Kubernetes..."
 
                     sh """
-                    sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' maven-app/values.yaml
 
-                    helm upgrade --install ${params.RELEASE_NAME} ./maven-app \
+                    if [! -d "${env.CHART_DIR}"]; then
+                        echo "❌ Error: Chart directory ${env.CHART_DIR} not found!"
+                        ls -la
+                        exit 1
+                    fi
+
+                    sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/values.yaml
+
+                    helm upgrade --install ${params.RELEASE_NAME} ./${env.CHART_DIR} \
                             --namespace ${params.NAMESPACE} \
                             --create-namespace \
                             --set image.tag=${params.IMAGE_TAG} \
@@ -69,13 +84,15 @@ pipeline{
         stage('Verify Deployment'){
             steps{
                 script{
-                    echo "✅ Verifying deployment..."
+                    echo "🔍 Verifying deployment..."
 
                     sh """
                     kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get svc -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get ingress -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     """
+
+                    echo "✅ Deployment verification complete"
                 }
             }
         }
