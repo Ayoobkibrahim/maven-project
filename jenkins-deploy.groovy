@@ -59,15 +59,10 @@ pipeline{
                 script{
                     echo "🚀 Deploying application to Kubernetes..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_B64')]){
+                    withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                     sh """
+                    set -e
 
-                    KUBECONFIG_FILE=\$(mktemp)
-                    if printf "%s" "\$KUBECONFIG_B64" | head -n1 | grep -q 'apiVersion:'; then
-                        printf "%s" "\$KUBECONFIG_B64" > "\$KUBECONFIG_FILE"
-                    else
-                        printf "%s" "\$KUBECONFIG_B64" | tr -d '\\n\\r' | base64 -d > "\$KUBECONFIG_FILE"
-                    fi
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     echo "🔍 Verifying Kubernetes connection..."
@@ -98,10 +93,7 @@ pipeline{
                             --set image.tag=${params.IMAGE_TAG} \
                             --wait \
                             --timeout 5m
-
-
-
-                    rm -f "\$KUBECONFIG_FILE"        
+       
                     """
 
                     
@@ -118,22 +110,16 @@ pipeline{
                 script{
                     echo "🔍 Verifying deployment..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_B64')]){
+                    withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                                    
                     sh """
-                    KUBECONFIG_FILE=\$(mktemp)
-                    if printf "%s" "\$KUBECONFIG_B64" | head -n1 | grep -q 'apiVersion:'; then
-                        printf "%s" "\$KUBECONFIG_B64" > "\$KUBECONFIG_FILE"
-                    else
-                        printf "%s" "\$KUBECONFIG_B64" | tr -d '\\n\\r' | base64 -d > "\$KUBECONFIG_FILE"
-                    fi
+                    set -e
+
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get svc -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get ingress -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
-
-                    rm -f "\$KUBECONFIG_FILE"
                     """
                     }
 
