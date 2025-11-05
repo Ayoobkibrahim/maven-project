@@ -59,11 +59,11 @@ pipeline{
                 script{
                     echo "🚀 Deploying application to Kubernetes..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig-b64', variable: 'KUBECONFIG_B64')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_B64')]){
                     sh """
 
                     KUBECONFIG_FILE=\$(mktemp)
-                    printf \"%s\" \"\$KUBECONFIG_TEXT\" > \"\$KUBECONFIG_FILE\"
+                    echo "\$KUBECONFIG_B64" | base64 -d > "\$KUBECONFIG_FILE"
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     echo "🔍 Verifying Kubernetes connection..."
@@ -114,11 +114,11 @@ pipeline{
                 script{
                     echo "🔍 Verifying deployment..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig-b64', variable: 'KUBECONFIG_B64')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_B64')]){
                                    
                     sh """
                     KUBECONFIG_FILE=\$(mktemp)
-                    printf \"%s\" \"\$KUBECONFIG_TEXT\" > \"\$KUBECONFIG_FILE\"
+                    echo "\$KUBECONFIG_B64" | base64 -d > "\$KUBECONFIG_FILE"
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
