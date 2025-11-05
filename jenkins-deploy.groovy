@@ -4,7 +4,7 @@ pipeline{
     agent {label 'local-agent'}
 
     parameters{
-        string(name: 'BUILD_NUMBER', defaultVlaue: '', description:'Build number from Build Job')
+        string(name: 'BUILD_NUMBER', defaultValue: '', description:'Build number from Build Job')
         string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag to deploy')
         string(name: 'NAMESPACE', defaultValue: 'default', description: 'Kubernetes namespace')
         string(name: 'RELEASE_NAME', defaultValue: 'maven-app', description: 'Helm release name')
