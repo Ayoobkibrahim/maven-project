@@ -61,20 +61,20 @@ pipeline{
 
                     sh """
 
-                    if [! -d "${env.CHART_DIR}"]; then
+                    if [ ! -d "${env.CHART_DIR}" ]; then
                         echo "❌ Error: Chart directory ${env.CHART_DIR} not found!"
                         ls -la
                         exit 1
                     fi
 
-                    if [ ! -f "${env.CHART_DIR}/values.yaml" ]; then
-                        echo "⚠️ Warning: values.yaml not found at ${env.CHART_DIR}/values.yaml"
+                    if [ ! -f "${env.CHART_DIR}/Values.yaml" ]; then
+                        echo "⚠️ Warning: Values.yaml not found at ${env.CHART_DIR}/Values.yaml"
                         echo "Listing ${env.CHART_DIR} contents:"
                         ls -la ${env.CHART_DIR}/
-                        echo "Using --set flag only (values.yaml update skipped)"
+                        echo "Using --set flag only (Values.yaml update skipped)"
                     else
-                        echo "📝 Updating values.yaml with image tag: ${params.IMAGE_TAG}"
-                        sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/values.yaml
+                        echo "📝 Updating Values.yaml with image tag: ${params.IMAGE_TAG}"
+                        sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/Values.yaml
                     fi
 
                     echo "🚀 Installing/Upgrading Helm release..."
