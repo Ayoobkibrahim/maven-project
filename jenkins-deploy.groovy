@@ -14,7 +14,6 @@ pipeline{
         DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
         DOCKERHUB_USERNAME = 'ayoobki'
         HELM_CHART_REPO = "docker.io/${DOCKERHUB_USERNAME}/maven-app"
-        KUBECONFIG_CREDENTIALS_ID = 'kubernetes-kubeconfig'  
     }
 
     stages{
@@ -60,7 +59,7 @@ pipeline{
                 script{
                     echo "🚀 Deploying application to Kubernetes..."
 
-                    withCredentials([file(credentialsId: "${KUBECONFIG_CREDENTIALS_ID}", variable: 'KUBECONFIG_TEXT')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_TEXT')]){
                     sh """
 
                     KUBECONFIG_FILE=\$(mktemp)
@@ -115,7 +114,7 @@ pipeline{
                 script{
                     echo "🔍 Verifying deployment..."
 
-                    withCredentials([file(credentialsId: "${KUBECONFIG_CREDENTIALS_ID}", variable: 'KUBECONFIG_TEXT')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_TEXT')]){
                                    
                     sh """
                     KUBECONFIG_FILE=\$(mktemp)
@@ -129,9 +128,7 @@ pipeline{
                     rm -f "\$KUBECONFIG_FILE"
                     """
                     }
-
                     
-
                     echo "✅ Deployment verification complete"
                 }
             }
