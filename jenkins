@@ -99,7 +99,7 @@ pipeline {
                         git url: 'https://github.com/Ayoobkibrahim/maven-helm-chart.git', branch: 'main'
 
                     sh """
-                        sed -i 's|tag:.*|tag: \"${env.IMAGE_TAG}\"|g' Values.yaml
+                        sed -i 's|tag:.*|tag: \"${env.IMAGE_TAG}\"|g' values.yaml
                     """
                     }
                     echo "✅ Helm values.yaml update with tag: ${env.IMAGE_TAG}"
