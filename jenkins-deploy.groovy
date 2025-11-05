@@ -45,6 +45,9 @@ pipeline{
                     env.CHART_DIR = chartDir
 
                     echo "📦 Chart directory identified: ${env.CHART_DIR}"
+                    sh "ls -la"
+                    sh "ls -la ${env.CHART_DIR} || echo 'Chart directory listing failed'"
+
                     echo "✅ Helm chart downloaded successfully.."
                 }
             }
@@ -64,8 +67,17 @@ pipeline{
                         exit 1
                     fi
 
-                    sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/values.yaml
+                    if [ ! -f "${env.CHART_DIR}/values.yaml" ]; then
+                        echo "⚠️ Warning: values.yaml not found at ${env.CHART_DIR}/values.yaml"
+                        echo "Listing ${env.CHART_DIR} contents:"
+                        ls -la ${env.CHART_DIR}/
+                        echo "Using --set flag only (values.yaml update skipped)"
+                    else
+                        echo "📝 Updating values.yaml with image tag: ${params.IMAGE_TAG}"
+                        sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/values.yaml
+                    fi
 
+                    echo "🚀 Installing/Upgrading Helm release..."
                     helm upgrade --install ${params.RELEASE_NAME} ./${env.CHART_DIR} \
                             --namespace ${params.NAMESPACE} \
                             --create-namespace \
