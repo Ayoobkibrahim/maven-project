@@ -63,7 +63,11 @@ pipeline{
                     sh """
 
                     KUBECONFIG_FILE=\$(mktemp)
-                    echo "\$KUBECONFIG_B64" | base64 -d > "\$KUBECONFIG_FILE"
+                    if printf "%s" "\$KUBECONFIG_B64" | head -n1 | grep -q 'apiVersion:'; then
+                        printf "%s" "\$KUBECONFIG_B64" > "\$KUBECONFIG_FILE"
+                    else
+                        printf "%s" "\$KUBECONFIG_B64" | tr -d '\\n\\r' | base64 -d > "\$KUBECONFIG_FILE"
+                    fi
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     echo "🔍 Verifying Kubernetes connection..."
@@ -118,7 +122,11 @@ pipeline{
                                    
                     sh """
                     KUBECONFIG_FILE=\$(mktemp)
-                    echo "\$KUBECONFIG_B64" | base64 -d > "\$KUBECONFIG_FILE"
+                    if printf "%s" "\$KUBECONFIG_B64" | head -n1 | grep -q 'apiVersion:'; then
+                        printf "%s" "\$KUBECONFIG_B64" > "\$KUBECONFIG_FILE"
+                    else
+                        printf "%s" "\$KUBECONFIG_B64" | tr -d '\\n\\r' | base64 -d > "\$KUBECONFIG_FILE"
+                    fi
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
                     kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
