@@ -13,7 +13,8 @@ pipeline{
     environment {
         DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
         DOCKERHUB_USERNAME = 'ayoobki'
-        HELM_CHART_REPO = "docker.io/${DOCKERHUB_USERNAME}/maven-app"  
+        HELM_CHART_REPO = "docker.io/${DOCKERHUB_USERNAME}/maven-app"
+        KUBECONFIG_CREDENTIALS_ID = 'kubernetes-kubeconfig'  
     }
 
     stages{
@@ -59,11 +60,21 @@ pipeline{
                 script{
                     echo "🚀 Deploying application to Kubernetes..."
 
+                    withCredentials([file(credentialsId: "${KUBECONFIG_CREDENTIALS_ID}", variable: 'KUBECONFIG_TEXT')]){
                     sh """
+
+                    KUBECONFIG_FILE=\$(mktemp)
+                    printf \"%s\" \"\$KUBECONFIG_TEXT\" > \"\$KUBECONFIG_FILE\"
+                    export KUBECONFIG=\"\$KUBECONFIG_FILE\"
+
+                    echo "🔍 Verifying Kubernetes connection..."
+                    kubectl cluster-info || { echo "❌ Cannot connect to Kubernetes cluster"; rm -f "\$KUBECONFIG_FILE"; exit 1; }
+
 
                     if [ ! -d "${env.CHART_DIR}" ]; then
                         echo "❌ Error: Chart directory ${env.CHART_DIR} not found!"
                         ls -la
+                        rm -f "\$KUBECONFIG_FILE"
                         exit 1
                     fi
 
@@ -85,9 +96,15 @@ pipeline{
                             --wait \
                             --timeout 5m
 
+
+
+                    rm -f "\$KUBECONFIG_FILE"        
                     """
 
+                    
+                    }
                     echo "✅ Application deployed successfully"
+                    
                 }
             }
         }
@@ -98,11 +115,22 @@ pipeline{
                 script{
                     echo "🔍 Verifying deployment..."
 
+                    withCredentials([file(credentialsId: "${KUBECONFIG_CREDENTIALS_ID}", variable: 'KUBECONFIG_TEXT')]){
+                                   
                     sh """
+                    KUBECONFIG_FILE=\$(mktemp)
+                    printf \"%s\" \"\$KUBECONFIG_TEXT\" > \"\$KUBECONFIG_FILE\"
+                    export KUBECONFIG=\"\$KUBECONFIG_FILE\"
+
                     kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get svc -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
                     kubectl get ingress -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
+
+                    rm -f "\$KUBECONFIG_FILE"
                     """
+                    }
+
+                    
 
                     echo "✅ Deployment verification complete"
                 }
