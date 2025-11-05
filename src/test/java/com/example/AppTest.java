@@ -1,21 +1,36 @@
 package com.example;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.ResponseEntity;
 
-public class AppTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class AppTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @Test
-    public void testAdd() {
-        App app = new App();
-        int result = app.add(5, 3);
-        assertEquals(8, result, "5 + 3 should equal 8");
+    void contextLoads() {
+        // Verifies the Spring context starts successfully
+        assertThat(restTemplate).isNotNull();
     }
 
     @Test
-    public void testAddNegative() {
-        App app = new App();
-        int result = app.add(-2, -3);
-        assertEquals(-5, result, "-2 + -3 should equal -5");
+    void testHomeEndpoint() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/", String.class);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getBody()).contains("Hello World Maven Project");
+    }
+
+    @Test
+    void testAddEndpoint() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/add?a=5&b=3", String.class);
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getBody()).contains("Sum is: 8");
     }
 }

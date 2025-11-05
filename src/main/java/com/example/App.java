@@ -1,17 +1,24 @@
 package com.example;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World Maven Project!" );
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+@RestController
+public class App {
+
+    public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
     }
 
-    public int add(int a,int b){
-        return a+b;
+    @GetMapping("/")
+    public String home() {
+        return "Hello World Maven Project (Spring Boot Version)!";
+    }
+
+    @GetMapping("/add")
+    public String add(@RequestParam int a, @RequestParam int b) {
+        return "Sum is: " + (a + b);
     }
 }
