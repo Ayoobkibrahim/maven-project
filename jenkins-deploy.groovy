@@ -59,7 +59,7 @@ pipeline{
                 script{
                     echo "🚀 Deploying application to Kubernetes..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_TEXT')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig-b64', variable: 'KUBECONFIG_B64')]){
                     sh """
 
                     KUBECONFIG_FILE=\$(mktemp)
@@ -114,7 +114,7 @@ pipeline{
                 script{
                     echo "🔍 Verifying deployment..."
 
-                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_TEXT')]){
+                    withCredentials([string(credentialsId: 'kubernetes-kubeconfig-b64', variable: 'KUBECONFIG_B64')]){
                                    
                     sh """
                     KUBECONFIG_FILE=\$(mktemp)
@@ -128,7 +128,7 @@ pipeline{
                     rm -f "\$KUBECONFIG_FILE"
                     """
                     }
-                    
+
                     echo "✅ Deployment verification complete"
                 }
             }
