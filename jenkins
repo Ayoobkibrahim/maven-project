@@ -156,7 +156,7 @@ pipeline {
             steps{
                 script{
                     echo "🚀 Triggering Deploy Job..."
-                    build job: 'maven-deploy-job',
+                    build job: 'maven-project-deploy-job',
                         parameters : [
                             string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
                             string(name: 'IMAGE_TAG', value: "${env.IMAGE_TAG}"),
