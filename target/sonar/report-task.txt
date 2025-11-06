@@ -2,5 +2,5 @@ projectKey=sample-maven-project
 serverUrl=http://localhost:9000
 serverVersion=25.10.0.114319
 dashboardUrl=http://localhost:9000/dashboard?id=sample-maven-project
-ceTaskId=3a60db84-85b1-4c31-b77e-2d62bb03f76f
-ceTaskUrl=http://localhost:9000/api/ce/task?id=3a60db84-85b1-4c31-b77e-2d62bb03f76f
+ceTaskId=f5a81415-f74b-412f-a0f7-17bbba3a549f
+ceTaskUrl=http://localhost:9000/api/ce/task?id=f5a81415-f74b-412f-a0f7-17bbba3a549f

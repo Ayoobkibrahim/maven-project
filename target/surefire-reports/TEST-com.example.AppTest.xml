@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.AppTest" time="0.061" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.AppTest" time="2.486" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sonar.host.url" value="http://localhost:9000"/>
@@ -8,12 +8,13 @@
     <property name="java.vm.vendor" value="Ubuntu"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="user.timezone" value="Asia/Kolkata"/>
     <property name="os.name" value="Linux"/>
     <property name="java.vm.specification.version" value="21"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106131137348_3.jar /home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire 2025-11-06T13-11-37_287-jvmRun1 surefire-20251106131137348_1tmp surefire_0-20251106131137348_2tmp"/>
+    <property name="sun.java.command" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106143750267_3.jar /home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire 2025-11-06T14-37-50_220-jvmRun1 surefire-20251106143750267_1tmp surefire_0-20251106143750267_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/test-classes:/home/ayoob-k-ibrahim/Brototype/maven-project/target/classes:/home/ayoob-k-ibrahim/.m2/repository/org/slf4j/slf4j-api/2.0.7/slf4j-api-2.0.7.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.0/junit-jupiter-5.10.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.0/junit-jupiter-api-5.10.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-commons/1.10.0/junit-platform-commons-1.10.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.0/junit-jupiter-params-5.10.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.0/junit-jupiter-engine-5.10.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-engine/1.10.0/junit-platform-engine-1.10.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -28,7 +29,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106131137348_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106143750267_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.8+9-Ubuntu-0ubuntu124.04.1"/>
     <property name="user.name" value="ayoob-k-ibrahim"/>
@@ -56,6 +57,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testAdd" classname="com.example.AppTest" time="0.038"/>
-  <testcase name="testAddNegative" classname="com.example.AppTest" time="0.001"/>
+  <testcase name="testAdd" classname="com.example.AppTest" time="0.373"/>
+  <testcase name="testAddNegativeNumbers" classname="com.example.AppTest" time="0.001"/>
+  <testcase name="testMainServerStart" classname="com.example.AppTest" time="2.087">
+    <system-err><![CDATA[Nov 06, 2025 2:37:51 PM com.example.App main
+INFO: ✅ Starting Java server on port 36387...
+Nov 06, 2025 2:37:51 PM com.example.App main
+INFO: 🚀 Server started at http://localhost:36387
+]]></system-err>
+  </testcase>
+  <testcase name="testAddWithZero" classname="com.example.AppTest" time="0.001"/>
 </testsuite>
