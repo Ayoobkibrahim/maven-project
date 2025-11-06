@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script{
                     echo "🔎 Waiting for SonarQube Quality Gate result..."
-                    timeout(time: 3, unit: 'MINUTES') {
+                    timeout(time: 5, unit: 'MINUTES') {
                         def qg = waitForQualityGate()
                         if(qg.status != 'OK'){
                             error "❌Pipeline failed because Quality Gate status is: ${qg.status}"
