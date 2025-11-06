@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.AppTest" time="0.034" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.example.AppTest" time="0.066" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
+    <property name="sonar.host.url" value="http://localhost:9000"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="java.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/test-classes:/home/ayoob-k-ibrahim/Brototype/maven-project/target/classes:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:"/>
+    <property name="java.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/test-classes:/home/ayoob-k-ibrahim/Brototype/maven-project/target/classes:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/slf4j/slf4j-api/2.0.7/slf4j-api-2.0.7.jar:/home/ayoob-k-ibrahim/.m2/repository/ch/qos/logback/logback-classic/1.4.11/logback-classic-1.4.11.jar:/home/ayoob-k-ibrahim/.m2/repository/ch/qos/logback/logback-core/1.4.11/logback-core-1.4.11.jar:"/>
     <property name="java.vm.vendor" value="Ubuntu"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="https://ubuntu.com/"/>
@@ -12,9 +13,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106085147743_3.jar /home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire 2025-11-06T08-51-47_674-jvmRun1 surefire-20251106085147743_1tmp surefire_0-20251106085147743_2tmp"/>
+    <property name="sun.java.command" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106094057099_3.jar /home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire 2025-11-06T09-40-57_045-jvmRun1 surefire-20251106094057099_1tmp surefire_0-20251106094057099_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/test-classes:/home/ayoob-k-ibrahim/Brototype/maven-project/target/classes:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:"/>
+    <property name="surefire.test.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/test-classes:/home/ayoob-k-ibrahim/Brototype/maven-project/target/classes:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:/home/ayoob-k-ibrahim/.m2/repository/org/slf4j/slf4j-api/2.0.7/slf4j-api-2.0.7.jar:/home/ayoob-k-ibrahim/.m2/repository/ch/qos/logback/logback-classic/1.4.11/logback-classic-1.4.11.jar:/home/ayoob-k-ibrahim/.m2/repository/ch/qos/logback/logback-core/1.4.11/logback-core-1.4.11.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="/home/ayoob-k-ibrahim"/>
     <property name="user.language" value="en"/>
@@ -25,9 +26,9 @@
     <property name="basedir" value="/home/ayoob-k-ibrahim/Brototype/maven-project"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="line.separator" value="&#10;"/>
-    <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106085147743_3.jar"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="/home/ayoob-k-ibrahim/Brototype/maven-project/target/surefire/surefirebooter-20251106094057099_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.8+9-Ubuntu-0ubuntu124.04.1"/>
     <property name="user.name" value="ayoob-k-ibrahim"/>
@@ -40,11 +41,13 @@
     <property name="localRepository" value="/home/ayoob-k-ibrahim/.m2/repository"/>
     <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-21"/>
     <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="sonar.token" value="squ_fca202c002ab1c646af43a6147b69289cf332f53"/>
     <property name="java.version" value="21.0.8"/>
     <property name="user.dir" value="/home/ayoob-k-ibrahim/Brototype/maven-project"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="native.encoding" value="UTF-8"/>
+    <property name="sonar.projectKey" value="sample-maven-project"/>
     <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
     <property name="stderr.encoding" value="UTF-8"/>
@@ -53,6 +56,6 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testAdd" classname="com.example.AppTest" time="0.021"/>
-  <testcase name="testAddNegative" classname="com.example.AppTest" time="0.001"/>
+  <testcase name="testAdd" classname="com.example.AppTest" time="0.047"/>
+  <testcase name="testAddNegative" classname="com.example.AppTest" time="0.002"/>
 </testsuite>
