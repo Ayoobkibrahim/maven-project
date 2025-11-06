@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
@@ -15,33 +16,44 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-
-    <!-- Optional: Sonar defaults -->
     <sonar.projectKey>sample-maven-project</sonar.projectKey>
     <sonar.host.url>http://localhost:9000</sonar.host.url>
+    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <dependencies>
-    <!-- Logging -->
+    <!-- Logging (API + Backend Implementation) -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>2.0.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>2.0.7</version>
+    </dependency>
 
-    <!-- JUnit -->
+    <!-- JUnit 5 -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
+
+      <!-- Awaitility (Fixes 'await()' compile error) -->
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.2.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-
-      <!-- Compiler -->
+      <!-- Java Compilation -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
@@ -50,7 +62,7 @@
         </configuration>
       </plugin>
 
-      <!-- Surefire for unit tests -->
+      <!-- Unit Testing (JUnit 5) -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.1.2</version>
@@ -59,7 +71,7 @@
         </configuration>
       </plugin>
 
-      <!-- JaCoCo for coverage -->
+      <!-- JaCoCo for Coverage -->
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -81,14 +93,14 @@
         </executions>
       </plugin>
 
-      <!-- SonarQube plugin -->
+      <!-- SonarQube -->
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
         <version>4.0.0.4121</version>
       </plugin>
 
-      <!-- JAR plugin with manifest -->
+      <!-- JAR Manifest -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.2</version>
@@ -102,7 +114,7 @@
           </archive>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
+
 </project>

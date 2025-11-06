@@ -3,13 +3,13 @@ package com.example;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 public class App {
-
     private static final Logger logger = Logger.getLogger(App.class.getName());
 
     public static void main(String[] args) throws IOException {
@@ -18,11 +18,13 @@ public class App {
             port = Integer.parseInt(args[0]);
         }
 
-        logger.info("✅ Starting Java server on port " + port + "...");
+        logger.log(Level.INFO, "✅ Starting Java server on port {0}...", port);
+
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new MyHandler());
         server.start();
-        logger.info("🚀 Server started at http://localhost:" + port);
+
+        logger.log(Level.INFO, "🚀 Server started at http://localhost:{0}", port);
     }
 
     static class MyHandler implements HttpHandler {
@@ -36,7 +38,7 @@ public class App {
         }
     }
 
-    public int add(int a, int b) {
+    int add(int a, int b) {
         return a + b;
     }
 }

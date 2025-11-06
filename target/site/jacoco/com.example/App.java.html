@@ -3,13 +3,13 @@
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
-<span class="fc" id="L11">public class App {</span>
-
+<span class="fc" id="L12">public class App {</span>
 <span class="fc" id="L13">    private static final Logger logger = Logger.getLogger(App.class.getName());</span>
 
     public static void main(String[] args) throws IOException {
@@ -18,26 +18,28 @@ import com.sun.net.httpserver.HttpExchange;
 <span class="fc" id="L18">            port = Integer.parseInt(args[0]);</span>
         }
 
-<span class="fc" id="L21">        logger.info(&quot;✅ Starting Java server on port &quot; + port + &quot;...&quot;);</span>
-<span class="fc" id="L22">        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);</span>
-<span class="fc" id="L23">        server.createContext(&quot;/&quot;, new MyHandler());</span>
-<span class="fc" id="L24">        server.start();</span>
-<span class="fc" id="L25">        logger.info(&quot;🚀 Server started at http://localhost:&quot; + port);</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L21">        logger.log(Level.INFO, &quot;✅ Starting Java server on port {0}...&quot;, port);</span>
 
-<span class="fc" id="L28">    static class MyHandler implements HttpHandler {</span>
+<span class="fc" id="L23">        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);</span>
+<span class="fc" id="L24">        server.createContext(&quot;/&quot;, new MyHandler());</span>
+<span class="fc" id="L25">        server.start();</span>
+
+<span class="fc" id="L27">        logger.log(Level.INFO, &quot;🚀 Server started at http://localhost:{0}&quot;, port);</span>
+<span class="fc" id="L28">    }</span>
+
+<span class="fc" id="L30">    static class MyHandler implements HttpHandler {</span>
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-<span class="fc" id="L31">            String response = &quot;Hello World Maven Project!&quot;;</span>
-<span class="fc" id="L32">            exchange.sendResponseHeaders(200, response.getBytes().length);</span>
-<span class="fc" id="L33">            try (OutputStream os = exchange.getResponseBody()) {</span>
-<span class="fc" id="L34">                os.write(response.getBytes());</span>
+<span class="fc" id="L33">            String response = &quot;Hello World Maven Project!&quot;;</span>
+<span class="fc" id="L34">            exchange.sendResponseHeaders(200, response.getBytes().length);</span>
+<span class="fc" id="L35">            try (OutputStream os = exchange.getResponseBody()) {</span>
+<span class="fc" id="L36">                os.write(response.getBytes());</span>
             }
-<span class="fc" id="L36">        }</span>
+<span class="fc" id="L38">        }</span>
     }
 
-    public int add(int a, int b) {
-<span class="fc" id="L40">        return a + b;</span>
+    int add(int a, int b) {
+<span class="fc" id="L42">        return a + b;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

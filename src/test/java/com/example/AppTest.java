@@ -5,35 +5,39 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.URL;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.TimeUnit;
 
-public class AppTest {
+import static org.awaitility.Awaitility.await;
+
+class AppTest {
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         App app = new App();
-        assertEquals(8, app.add(5, 3), "Addition logic should return correct sum");
+        assertEquals(8, app.add(5, 3));
     }
 
     @Test
-    public void testAddNegativeNumbers() {
+    void testAddNegativeNumbers() {
         App app = new App();
-        assertEquals(-5, app.add(-2, -3), "Addition should handle negatives correctly");
+        assertEquals(-5, app.add(-2, -3));
     }
 
     @Test
-    public void testAddWithZero() {
+    void testAddWithZero() {
         App app = new App();
-        assertEquals(10, app.add(0, 10), "Adding zero should return same number");
+        assertEquals(10, app.add(0, 10));
     }
 
     @Test
-    public void testMainServerStart() {
+    void testMainServerStart() {
         assertDoesNotThrow(() -> {
-            int freePort = findFreePort(); 
+            int freePort = findFreePort();
+
             Thread serverThread = new Thread(() -> {
                 try {
                     App.main(new String[]{String.valueOf(freePort)});
@@ -43,13 +47,14 @@ public class AppTest {
             });
             serverThread.start();
 
-            Thread.sleep(2000);
+            await().atMost(5, TimeUnit.SECONDS)
+                    .until(() -> isServerRunning(freePort));
 
             String response = sendHttpRequest("http://localhost:" + freePort + "/");
             assertEquals("Hello World Maven Project!", response);
 
             serverThread.interrupt();
-        }, "Server should start successfully and respond correctly");
+        });
     }
 
     private int findFreePort() throws IOException {
@@ -59,22 +64,21 @@ public class AppTest {
         }
     }
 
-    private String sendHttpRequest(String urlStr) throws IOException {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setConnectTimeout(2000);
-        conn.setReadTimeout(2000);
+    private String sendHttpRequest(String urlStr) throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(urlStr))
+                                         .timeout(java.time.Duration.ofSeconds(3))
+                                         .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode(), "Expected HTTP 200 OK response");
+        return response.body();
+    }
 
-        assertEquals(200, conn.getResponseCode(), "Expected HTTP 200 OK response");
-
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = in.readLine()) != null) {
-                response.append(line);
-            }
-            return response.toString();
+    private boolean isServerRunning(int port) {
+        try (Socket socket = new Socket("localhost", port)) {
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 }
