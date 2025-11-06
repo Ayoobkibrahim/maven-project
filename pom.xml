@@ -16,19 +16,20 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
 
-    <!-- Optional: default sonar props (overrideable from CLI) -->
+    <!-- Optional: Sonar defaults -->
     <sonar.projectKey>sample-maven-project</sonar.projectKey>
     <sonar.host.url>http://localhost:9000</sonar.host.url>
   </properties>
 
   <dependencies>
-    <!-- small example dependency -->
+    <!-- Logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>2.0.7</version>
     </dependency>
 
+    <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
@@ -80,17 +81,26 @@
         </executions>
       </plugin>
 
-      <!-- (Optional) sonar-maven-plugin entry - not required, but shown -->
+      <!-- SonarQube plugin -->
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
         <version>4.0.0.4121</version>
       </plugin>
 
-      <!-- Jar packaging -->
+      <!-- JAR plugin with manifest -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>com.example.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
 
     </plugins>
