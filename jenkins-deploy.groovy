@@ -24,12 +24,13 @@ pipeline{
                     withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
                         sh """
                         echo "\$DOCKER_PASS" | helm registry login -u "\$DOCKER_USER" --password-stdin docker.io
-
+                        rm -f maven-app-*.tgz || true
                         helm pull oci://docker.io/\$DOCKER_USER/maven-app --version 0.1.${params.BUILD_NUMBER}
-
-                        tar -xzf maven-app-*.tgz
                         """
                     }
+
+                    def chartFile = sh(script: "ls maven-app-*.tgz | sort | tail -n 1", returnStdout: true).trim()
+                    sh "tar -xzf ${chartFile}"
 
                     def chartDir = sh(
                         script: "tar -tzf maven-app-*.tgz | head -1 | cut -d'/' -f1",
