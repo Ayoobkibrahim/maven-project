@@ -121,6 +121,7 @@ pipeline {
                 script{
                     echo "📦 Packaging Helm chart..."
                     sh """
+                        rm -f maven-helm-chart/*.tgz || true
                         cd maven-helm-chart
                         helm package . --version 0.1.${env.BUILD_NUMBER}
                         cd ..
@@ -139,7 +140,8 @@ pipeline {
                         echo "\$DOCKER_PASS" | helm registry login -u "\$DOCKER_USER" --password-stdin docker.io
                         
                         cd maven-helm-chart
-                        helm push maven-app-*.tgz oci://docker.io/\$DOCKER_USER
+                        latest_chart=\$(ls maven-app-*.tgz | sort | tail -n 1)
+                        helm push \$latest_chart oci://docker.io/\$DOCKER_USER
                         cd ..
                         """
                     }
