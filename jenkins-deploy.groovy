@@ -18,13 +18,6 @@ pipeline{
 
     stages{
 
-        stage('Checkout'){
-            steps{
-                git url: 'https://github.com/Ayoobkibrahim/maven-project.git', branch: 'main'
-            }
-        }
-
-
         stage('Download Helm Chart from Docker Hub'){
             steps{
                 script{
@@ -45,8 +38,6 @@ pipeline{
                     env.CHART_DIR = chartDir
 
                     echo "📦 Chart directory identified: ${env.CHART_DIR}"
-                    sh "ls -la"
-                    sh "ls -la ${env.CHART_DIR} || echo 'Chart directory listing failed'"
 
                     echo "✅ Helm chart downloaded successfully.."
                 }
@@ -65,37 +56,17 @@ pipeline{
 
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
-                    echo "🔍 Verifying Kubernetes connection..."
-                    kubectl cluster-info || { echo "❌ Cannot connect to Kubernetes cluster"; rm -f "\$KUBECONFIG_FILE"; exit 1; }
-
-
-                    if [ ! -d "${env.CHART_DIR}" ]; then
-                        echo "❌ Error: Chart directory ${env.CHART_DIR} not found!"
-                        ls -la
-                        rm -f "\$KUBECONFIG_FILE"
-                        exit 1
-                    fi
-
-                    if [ ! -f "${env.CHART_DIR}/values.yaml" ]; then
-                        echo "⚠️ Warning: values.yaml not found at ${env.CHART_DIR}/values.yaml"
-                        echo "Listing ${env.CHART_DIR} contents:"
-                        ls -la ${env.CHART_DIR}/
-                        echo "Using --set flag only (values.yaml update skipped)"
-                    else
-                        echo "📝 Updating values.yaml with image tag: ${params.IMAGE_TAG}"
+                    if [ -f "${env.CHART_DIR}/values.yaml" ]; then
                         sed -i 's|tag:.*|tag: \"${params.IMAGE_TAG}\"|g' ${env.CHART_DIR}/values.yaml
                     fi
 
-                    echo "🚀 Installing/Upgrading Helm release..."
                     helm upgrade --install ${params.RELEASE_NAME} ./${env.CHART_DIR} \
                             --namespace ${params.NAMESPACE} \
                             --create-namespace \
                             --set image.tag=${params.IMAGE_TAG} \
                             --wait \
                             --timeout 5m
-       
                     """
-
                     
                     }
                     echo "✅ Application deployed successfully"
