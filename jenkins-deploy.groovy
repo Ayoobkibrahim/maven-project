@@ -25,7 +25,7 @@ pipeline{
                         sh """
                         echo "\$DOCKER_PASS" | helm registry login -u "\$DOCKER_USER" --password-stdin docker.io
 
-                        helm pull oci://docker.io/\$DOCKER_USER/maven-app --version 0.1.0
+                        helm pull oci://docker.io/\$DOCKER_USER/maven-app --version 0.1.${params.BUILD_NUMBER}
 
                         tar -xzf maven-app-*.tgz
                         """
