@@ -117,4 +117,20 @@
     </plugins>
   </build>
 
+  <!-- JFrog Artifactory Deployment Section -->
+  <distributionManagement>
+    <repository>
+      <id>jfrog-release</id>
+      <name>JFrog Maven Release Repository</name>
+      <url>https://trialibk226.jfrog.io/artifactory/maven-libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>jfrog-snapshot</id>
+      <name>JFrog Maven Snapshot Repository</name>
+      <url>https://trialibk226.jfrog.io/artifactory/maven-libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+
+
 </project>
