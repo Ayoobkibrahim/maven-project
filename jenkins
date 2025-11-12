@@ -6,7 +6,11 @@ pipeline {
     environment {
         SONARQUBE = 'SonarQube-Local'
 	    DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
-	    IMAGE_NAME = 'ayoobki/maven-app' 
+	    IMAGE_NAME = 'ayoobki/maven-app'
+        ARTIFACTORY_URL = 'https://trialibk226.jfrog.io/artifactory'
+        ARTIFACTORY_REPO = 'kustomize-artifacts-local'
+        ARTIFACTORY_USER = 'ayoobkibrahim@zohomail.in'
+        ARTIFACTORY_PASSWORD = 'AP6rzBqCxCN6JZ5J76H1SNtPKuD' 
     }
 
     stages {
@@ -98,66 +102,40 @@ pipeline {
             }
         }
 
-
-        stage('Update Helm Chart Values'){
+        stage('Prepare Kustomize Repo'){
             steps{
-                script{
-                    echo "📝 Updating image tag in Helm values.yaml...."
+                sh """
+                    rm -rf maven-kustomize
+                    git clone https://github.com/Ayoobkibrahim/maven-kustomize.git
+                """
 
-                    dir('maven-helm-chart'){
-                        git url: 'https://github.com/Ayoobkibrahim/maven-helm-chart.git', branch: 'main'
-
-                    sh """
-                        sed -i 's|tag:.*|tag: \"${env.IMAGE_TAG}\"|g' values.yaml
-                    """
-                    }
-                    echo "✅ Helm values.yaml update with tag: ${env.IMAGE_TAG}"
-                }
+                sh """
+                    cd maven-kustomize/base
+                    sed -i 's|image:.*|image: ayoobki/maven-app:'"${IMAGE_TAG}"'|g' deployment.yaml
+                """
             }
         }
 
-        stage('Package Helm Chart'){
+        stage('Package Kustomize Directory'){
             steps{
-                script{
-                    echo "📦 Packaging Helm chart..."
-                    sh """
-                        rm -f maven-helm-chart/*.tgz || true
-                        cd maven-helm-chart
-                        helm package . --version 0.1.${env.BUILD_NUMBER}
-                        cd ..
-                    """
-                    echo "✅ Helm chart packaged successfully"
-                }
+                echo "Creating tar.gz package of Kustomize repo..."
+
+                sh """
+                    tar -czf kustomize-${BUILD_NUMBER}.tar.gz maven-kustomize/
+                """
+
             }
         }
 
-        stage('Push Helm Chart to Docker Hub'){
+        stage('Upload to Artifactory'){
             steps{
-                script{
-                    echo "⬆️ Pushing Helm chart to Docker Hub OCI registry..."
-                    withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
-                        sh """
-                        echo "\$DOCKER_PASS" | helm registry login -u "\$DOCKER_USER" --password-stdin docker.io
-                        
-                        cd maven-helm-chart
-                        latest_chart=\$(ls maven-app-*.tgz | sort | tail -n 1)
-                        helm push \$latest_chart oci://docker.io/\$DOCKER_USER
-                        cd ..
-                        """
-                    }
-                    echo "✅ Helm chart pushed to Docker Hub"
-                }
-            }
-        }
+                echo "Uploading Kustomize package to JFrog Artifactory..."
 
-
-        stage('Archive Helm Chart'){
-            steps{
-                script{
-                    echo "📦 Archiving Helm chart..."
-                    archiveArtifacts artifacts: 'maven-helm-chart/*.tgz', fingerprint: true
-                    echo "✅ Helm chart archived"
-                }
+                sh """
+                    curl -u ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
+                    -T kustomize-${BUILD_NUMBER}.tar.gz \
+                    "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
+                """
             }
         }
 
