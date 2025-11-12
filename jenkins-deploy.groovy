@@ -42,13 +42,15 @@ pipeline{
         stage('Deploy to Kubernetes'){
             steps{
                 script{
+                    echo "Deploying to ${params.ENVIRONMENT} environment..."
+
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                         sh """
                             export KUBECONFIG=$KUBECONFIG_FILE
-                            echo "Deploying to ${ENVIRONMENT} environment..."
+                            
 
-                            kubectl get ns ${ENVIRONMENT} || kubectl create ns ${ENVIRONMENT}
-                            kubectl apply -k maven-kustomize/overlays/${ENVIRONMENT} --namespace=${ENVIRONMENT}
+                            kubectl get ns ${params.ENVIRONMENT} || kubectl create ns ${params.ENVIRONMENT}
+                            kubectl apply -k maven-kustomize/overlays/${params.ENVIRONMENT} --namespace=${params.ENVIRONMENT}
                         """
 
                     }
@@ -68,9 +70,9 @@ pipeline{
 
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
-                    kubectl get pods -n ${ENVIRONMENT}
-                    kubectl get svc -n ${ENVIRONMENT}
-                    kubectl get ingress -n ${ENVIRONMENT} 
+                    kubectl get pods -n ${params.ENVIRONMENT}
+                    kubectl get svc -n ${params.ENVIRONMENT}
+                    kubectl get ingress -n ${params.ENVIRONMENT} 
                     """
                     }
 
