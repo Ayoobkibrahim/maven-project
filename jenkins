@@ -3,6 +3,10 @@
 pipeline {
     agent {label 'local-agent'}
 
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'stage', 'prod'], description: 'Select environment for deployment')
+    }
+
     environment {
         SONARQUBE = 'SonarQube-Local'
 	    DOCKERHUB_CREDENTIALS = 'docker-jenkins-token'
@@ -123,6 +127,7 @@ pipeline {
                 sh """
                     tar -czf kustomize-${BUILD_NUMBER}.tar.gz maven-kustomize/
                 """
+                archiveArtifacts artifacts: "kustomize-${BUILD_NUMBER}.tar.gz", fingerprint: true
 
             }
         }
@@ -149,8 +154,7 @@ pipeline {
                         parameters : [
                             string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
                             string(name: 'IMAGE_TAG', value: "${env.IMAGE_TAG}"),
-                            string(name: 'NAMESPACE', value: 'default'),
-                            string(name: 'RELEASE_NAME', value: 'maven-app')
+                            string(name: 'ENVIRONMENT', value: "${params.ENVIRONMENT}")
                         ],
                         wait: false
                     echo "✅ Deploy job triggered with build number: ${env.BUILD_NUMBER}"

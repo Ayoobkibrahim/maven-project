@@ -6,7 +6,7 @@ pipeline{
     parameters{
         string(name: 'BUILD_NUMBER', defaultValue: '', description:'Build number from Build Job')
         string(name: 'IMAGE_TAG', defaultValue: '', description: 'Image tag to deploy')
-        string(name: 'NAMESPACE', defaultValue: 'default', description: 'Kubernetes namespace')
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'stage', 'prod'], description: 'Select deployment environment')
     }
 
     environment {
@@ -45,8 +45,10 @@ pipeline{
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                         sh """
                             export KUBECONFIG=$KUBECONFIG_FILE
-                            echo "Deploying application to Kubernetes..."
-                            kubectl apply -k maven-kustomize/overlays/dev --namespace=${NAMESPACE}
+                            echo "Deploying to ${ENVIRONMENT} environment..."
+
+                            kubectl get ns ${ENVIRONMENT} || kubectl create ns ${ENVIRONMENT}
+                            kubectl apply -k maven-kustomize/overlays/${ENVIRONMENT} --namespace=${ENVIRONMENT}
                         """
 
                     }
@@ -66,9 +68,9 @@ pipeline{
 
                     export KUBECONFIG=\"\$KUBECONFIG_FILE\"
 
-                    kubectl get pods -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
-                    kubectl get svc -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
-                    kubectl get ingress -n ${params.NAMESPACE} -l app.kubernetes.io/name=maven-app
+                    kubectl get pods -n ${ENVIRONMENT}
+                    kubectl get svc -n ${ENVIRONMENT}
+                    kubectl get ingress -n ${ENVIRONMENT} 
                     """
                     }
 
