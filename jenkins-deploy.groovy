@@ -43,6 +43,7 @@ pipeline{
             steps{
                 script{
                     echo "Deploying to ${params.ENVIRONMENT} environment..."
+                    sh "export PATH=\$PATH:/home/jenkins-agent"
 
                     sh """
                         cd maven-kustomize/overlays/${params.ENVIRONMENT}
