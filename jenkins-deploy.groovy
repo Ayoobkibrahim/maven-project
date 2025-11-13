@@ -44,10 +44,14 @@ pipeline{
                 script{
                     echo "Deploying to ${params.ENVIRONMENT} environment..."
 
+                    sh """
+                        cd maven-kustomize/overlays/${params.ENVIRONMENT}
+                        kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
+                    """
+
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                         sh """
                             export KUBECONFIG=$KUBECONFIG_FILE
-                            
 
                             kubectl get ns ${params.ENVIRONMENT} || kubectl create ns ${params.ENVIRONMENT}
                             kubectl apply -k maven-kustomize/overlays/${params.ENVIRONMENT} --namespace=${params.ENVIRONMENT}
@@ -61,7 +65,7 @@ pipeline{
         stage('Verify Deployment'){
             steps{
                 script{
-                    echo "🔍 Verifying deployment..."
+                    echo "Verifying deployment..."
 
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
                                    
@@ -76,7 +80,7 @@ pipeline{
                     """
                     }
 
-                    echo "✅ Deployment verification complete"
+                    echo "Deployment verification complete"
                 }
             }
         }

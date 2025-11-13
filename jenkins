@@ -55,13 +55,13 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script{
-                    echo "🔎 Waiting for SonarQube Quality Gate result..."
+                    echo "Waiting for SonarQube Quality Gate result..."
                     timeout(time: 5, unit: 'MINUTES') {
                         def qg = waitForQualityGate()
                         if(qg.status != 'OK'){
-                            error "❌Pipeline failed because Quality Gate status is: ${qg.status}"
+                            error "Pipeline failed because Quality Gate status is: ${qg.status}"
                         }else{
-                            echo "✅ Quality Gate passed with status: ${qg.status}"
+                            echo "Quality Gate passed with status: ${qg.status}"
                         }
                     }
                 }
@@ -70,12 +70,12 @@ pipeline {
 
         stage('Docker Login'){
 	        steps{
-		        echo "🔐 Logging into DockerHub..."
+		        echo "Logging into DockerHub..."
                 script{
                     withCredentials([usernamePassword(credentialsId:"${DOCKERHUB_CREDENTIALS}",usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]){
                         sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
                     }
-                    echo "✅ Docker login successful."
+                    echo "Docker login successful."
                 }
 	        }
         }
@@ -89,9 +89,9 @@ pipeline {
                     env.DOCKER_IMAGE = "${IMAGE_NAME}:${env.IMAGE_TAG}"
 
 
-                    echo "🐳 Building Docker image ${env.DOCKER_IMAGE}..."
+                    echo "Building Docker image ${env.DOCKER_IMAGE}..."
                     sh "docker build -t ${env.DOCKER_IMAGE} ."
-                    echo "✅ Docker image built and tagged successfully."
+                    echo "Docker image built and tagged successfully."
                 }
             }
         }
@@ -101,7 +101,7 @@ pipeline {
                 script{
                     echo "⬆️ Pushing Docker image ${env.DOCKER_IMAGE}..."
                     sh "docker push ${env.DOCKER_IMAGE}"
-                    echo "✅ Docker image pushed successfully"
+                    echo "Docker image pushed successfully"
                 }
             }
         }
@@ -149,7 +149,7 @@ pipeline {
         stage('Trigger Deploy Job'){
             steps{
                 script{
-                    echo "🚀 Triggering Deploy Job..."
+                    echo "Triggering Deploy Job..."
                     build job: 'maven-project-deploy-job',
                         parameters : [
                             string(name: 'BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
@@ -157,7 +157,7 @@ pipeline {
                             string(name: 'ENVIRONMENT', value: "${params.ENVIRONMENT}")
                         ],
                         wait: false
-                    echo "✅ Deploy job triggered with build number: ${env.BUILD_NUMBER}"
+                    echo "Deploy job triggered with build number: ${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -170,13 +170,13 @@ pipeline {
     post {
         always{
             script{
-                echo "🧹 Cleanup: Logging out from DockerHub and removing local images..."
+                echo "Cleanup: Logging out from DockerHub and removing local images..."
                 sh """
                     docker logout || true
                     docker image prune -af || true
                     docker rmi ${env.DOCKER_IMAGE} || true
                 """
-                echo "✅ Docker cleanup complete."
+                echo "Docker cleanup complete."
             }
         }
 
