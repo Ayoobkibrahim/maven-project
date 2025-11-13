@@ -43,11 +43,10 @@ pipeline{
             steps{
                 script{
                     echo "Deploying to ${params.ENVIRONMENT} environment..."
-                    sh "export PATH=\$PATH:/home/jenkins-agent"
 
                     sh """
                         cd maven-kustomize/overlays/${params.ENVIRONMENT}
-                        kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
+                        /home/jenkins-agent/kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
                     """
 
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
