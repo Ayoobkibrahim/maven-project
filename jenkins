@@ -14,7 +14,9 @@ pipeline {
         ARTIFACTORY_URL = 'https://trialibk226.jfrog.io/artifactory'
         ARTIFACTORY_REPO = 'kustomize-artifacts-local'
         ARTIFACTORY_USER = 'ayoobkibrahim@zohomail.in'
-        ARTIFACTORY_PASSWORD = 'AP6rzBqCxCN6JZ5J76H1SNtPKuD' 
+        ARTIFACTORY_PASSWORD = 'AP6rzBqCxCN6JZ5J76H1SNtPKuD'
+        ARTIFACTORY_CRED = 'jfrog-credentials'
+
     }
 
     stages {
@@ -136,11 +138,15 @@ pipeline {
             steps{
                 echo "Uploading Kustomize package to JFrog Artifactory..."
 
-                sh """
-                    curl -u ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
-                    -T kustomize-${BUILD_NUMBER}.tar.gz \
-                    "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
-                """
+                 withCredentials([usernamePassword(credentialsId: "${ARTIFACTORY_CRED}", usernameVariable: 'ART_USER', passwordVariable: 'ART_PASS')]){
+                    sh """
+                        curl -u $ART_USER:$ART_PASS \
+                        -T kustomize-${BUILD_NUMBER}.tar.gz \
+                        "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
+                    """
+                 }
+
+                
             }
         }
 

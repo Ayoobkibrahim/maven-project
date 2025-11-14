@@ -15,6 +15,7 @@ pipeline{
         ARTIFACTORY_REPO = 'kustomize-artifacts-local'
         ARTIFACTORY_USER = 'ayoobkibrahim@zohomail.in'
         ARTIFACTORY_PASSWORD = 'AP6rzBqCxCN6JZ5J76H1SNtPKuD'
+        ARTIFACTORY_CRED = 'jfrog-credentials'
     }
 
     stages{
@@ -23,10 +24,13 @@ pipeline{
             steps{
                 echo "Downloading Kustomize package from Artifactory..."
 
-                sh """
-                    curl -u ${ARTIFACTORY_USER}:${ARTIFACTORY_PASSWORD} \
-                    -O "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
-                """
+                withCredentials([usernamePassword(credentialsId: "${ARTIFACTORY_CRED}", usernameVariable: 'ART_USER', passwordVariable: 'ART_PASS')]){
+                    sh """
+                        curl -u $ART_USER:$ART_PASS \
+                        -O "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
+                    """
+                }
+                
             }
         }
 
