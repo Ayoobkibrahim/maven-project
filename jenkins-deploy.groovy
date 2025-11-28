@@ -11,9 +11,9 @@ pipeline{
 
     environment {
 
-        ARTIFACTORY_URL = 'https://trialibk226.jfrog.io/artifactory'
-        ARTIFACTORY_REPO = 'kustomize-artifacts-local'
-        ARTIFACTORY_CRED = 'jfrog-credentials'
+        ARTIFACTORY_URL = 'http://localhost:8081'
+        ARTIFACTORY_REPO = 'kustomize-artifacts'
+        ARTIFACTORY_CRED = 'nexus-credentials'
     }
 
     stages{
