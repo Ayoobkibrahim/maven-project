@@ -25,7 +25,7 @@ pipeline{
                 withCredentials([usernamePassword(credentialsId: "${ARTIFACTORY_CRED}", usernameVariable: 'ART_USER', passwordVariable: 'ART_PASS')]){
                     sh """
                         curl -u $ART_USER:$ART_PASS \
-                        -O "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
+                        -O "${ARTIFACTORY_URL}/repository/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
                     """
                 }
                 
