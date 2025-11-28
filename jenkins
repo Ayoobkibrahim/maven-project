@@ -140,7 +140,7 @@ pipeline {
                     sh """
                         curl -u $ART_USER:$ART_PASS \
                         -T kustomize-${BUILD_NUMBER}.tar.gz \
-                        "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
+                        "${ARTIFACTORY_URL}/repository/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
                     """
                  }
 
