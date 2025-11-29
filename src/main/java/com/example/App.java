@@ -30,7 +30,9 @@ public class App {
     static class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            String response = "Hello World Maven Project!";
+            String env = System.getenv("APP_ENV");
+            if (env == null) env = "UNKNOWN";
+            String response = "Hello World Maven Project! Environment: " + env;
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
