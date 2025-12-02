@@ -24,4 +24,4 @@ EXPOSE 8080
 
 ENV JAVA_OPTS="-Xmx512m"
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar && tail -f /dev/null"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
