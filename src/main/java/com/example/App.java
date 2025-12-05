@@ -27,10 +27,11 @@ public class App {
         logger.log(Level.INFO, "🚀 Server started at http://localhost:{0}", port);
     }
 
+
     static class MyHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            String response = "Hello World Maven Project!";
+            String response = "Hello World Maven Project Hi!";
             exchange.sendResponseHeaders(200, response.getBytes().length);
             try (OutputStream os = exchange.getResponseBody()) {
                 os.write(response.getBytes());
