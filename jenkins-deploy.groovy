@@ -51,7 +51,7 @@ pipeline{
                         kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
                     """
 
-                    withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]){
                         sh """
                             export KUBECONFIG=$KUBECONFIG_FILE
 
