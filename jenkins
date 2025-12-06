@@ -115,7 +115,7 @@ pipeline {
 
                 sh """
                     cd maven-kustomize/base
-                    sed -i 's|image:.*|image: ayoobki/maven-app:'"${IMAGE_TAG}"'|g' deployment.yaml
+                    sed -i "s|image:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
                 """
             }
         }
@@ -136,9 +136,11 @@ pipeline {
             steps{
                 echo "Uploading Kustomize package to Nexus Artifactory..."
 
+                sh "ls -lh kustomize-${BUILD_NUMBER}.tar.gz || echo 'Tar file missing!'"
+
                  withCredentials([usernamePassword(credentialsId: "${ARTIFACTORY_CRED}", usernameVariable: 'ART_USER', passwordVariable: 'ART_PASS')]){
                     sh """
-                        curl -u $ART_USER:$ART_PASS \
+                        curl -v -u $ART_USER:$ART_PASS \
                         -T kustomize-${BUILD_NUMBER}.tar.gz \
                         "${ARTIFACTORY_URL}/repository/${ARTIFACTORY_REPO}/kustomize-${BUILD_NUMBER}.tar.gz"
                     """
