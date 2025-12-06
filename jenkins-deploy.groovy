@@ -48,7 +48,7 @@ pipeline{
 
                     sh """
                         cd maven-kustomize/overlays/${params.ENVIRONMENT}
-                        /home/jenkins-agent/kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
+                        kustomize edit set image ayoobki/maven-app:${IMAGE_TAG}
                     """
 
                     withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
