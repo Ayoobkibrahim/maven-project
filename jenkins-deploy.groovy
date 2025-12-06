@@ -69,7 +69,7 @@ pipeline{
                 script{
                     echo "Verifying deployment..."
 
-                    withCredentials([file(credentialsId: 'kubernetes-kubeconfig', variable: 'KUBECONFIG_FILE')]){
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_FILE')]){
                                    
                     sh """
                     set -e
